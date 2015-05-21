@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by Alexander Hieser on 20.05.15.
  */
-public class EasyResponse {
+public class OdinResponse {
 
     public String getResponseBody() {
         return ResponseBody;
@@ -26,7 +26,7 @@ public class EasyResponse {
     private StatusLine responseStatusLines;
     private Header[] headers ;
 
-    public EasyResponse(String body, StatusLine status, Header[] headers) {
+    public OdinResponse(String body, StatusLine status, Header[] headers) {
         this.ResponseBody = body;
         this.responseStatusLines = status;
         this.headers = headers;

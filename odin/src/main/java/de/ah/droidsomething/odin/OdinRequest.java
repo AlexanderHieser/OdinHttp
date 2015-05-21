@@ -1,35 +1,29 @@
 package de.ah.droidsomething.odin;
 
-import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.IllegalFormatException;
 
 import de.ah.droidsomething.easyhttp.enums.EasyMethods;
 
 /**
  * Created by Alexander Hieser on 20.05.15.
  */
-public class EasyRequest  {
+public class OdinRequest {
 
     /** Attributes **/
     private EasyMethods Method;
@@ -40,22 +34,22 @@ public class EasyRequest  {
 
     /** Methods **/
 
-    public EasyRequest() {
+    public OdinRequest() {
         this.parameters = new ArrayList<NameValuePair>();
         this.headers = new ArrayList<Header>();
     }
 
-    public EasyRequest setMethodType(EasyMethods method) {
+    public OdinRequest setMethodType(EasyMethods method) {
         this.Method = method;
         return this;
     }
 
-    public EasyRequest setRequestURL(String url) {
+    public OdinRequest setRequestURL(String url) {
         this.URL = url;
         return this;
     }
 
-    public EasyRequest setMethodType(String method) {
+    public OdinRequest setMethodType(String method) {
         try {
             EasyMethods easyMethods = parseMethods(method);
             this.setMethodType(easyMethods);
@@ -66,14 +60,14 @@ public class EasyRequest  {
         }
     }
 
-    public EasyRequest setRequestParams(ArrayList<NameValuePair> params) {
+    public OdinRequest setRequestParams(ArrayList<NameValuePair> params) {
         for (NameValuePair param : params) {
              parameters.add(param);
         }
         return  this;
     }
 
-    public EasyRequest setHeaders(Header... h) {
+    public OdinRequest setHeaders(Header... h) {
         for(Header header : h) {
             headers.add(header);
         }
@@ -88,7 +82,7 @@ public class EasyRequest  {
         parameters.clear();;
     }
 
-    public void execute(final EasyInterface callback) {
+    public void execute(final OdinInterface callback) {
         if(isValid()) {
         new AsyncTask<Void,Void,HttpResponse>() {
 
@@ -101,7 +95,7 @@ public class EasyRequest  {
             protected void onPostExecute(HttpResponse httpResponse) {
                 super.onPostExecute(httpResponse);
                 if(httpResponse != null) {
-                    EasyResponse easyResponse = parseResponse(response);
+                    OdinResponse easyResponse = parseResponse(response);
                     if(easyResponse == null){
                         callback.onError("An error occured. Cant parse HTTPResponse");
                     }
@@ -218,14 +212,14 @@ public class EasyRequest  {
 
 
     /**
-     * Parse incoming response to EasyResponse
+     * Parse incoming response to OdinResponse
      * @param response
      * @return
      */
-    private EasyResponse parseResponse(HttpResponse response) {
+    private OdinResponse parseResponse(HttpResponse response) {
         try {
             String body = EntityUtils.toString(response.getEntity());
-            EasyResponse rs = new EasyResponse(body,response.getStatusLine(), response.getAllHeaders());
+            OdinResponse rs = new OdinResponse(body,response.getStatusLine(), response.getAllHeaders());
             return  rs;
         }catch (IOException exception) {
             exception.printStackTrace();
