@@ -5,7 +5,9 @@ Odin is a lightweight Http Library wich simplifies the android HTTP Communicatio
 
 ```java
   final WebView view = (WebView) findViewById(R.id.web);
-        new OdinRequest().setRequestURL("http://www.google.de").setMethodType("GET").execute(new OdinInterface() {
+        new OdinRequest().setRequestURL("http://www.google.de")
+                         .setMethodType("GET")
+                         .execute(new OdinInterface() {
             @Override
             public void onFinish(OdinResponse response) {
                 view.loadData(response.getResponseBody(), "text/html", "UTF-8");
