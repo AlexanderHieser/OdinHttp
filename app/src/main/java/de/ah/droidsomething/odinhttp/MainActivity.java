@@ -2,8 +2,15 @@ package de.ah.droidsomething.odinhttp;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import de.ah.droidsomething.odin.OdinResponse;
+import de.ah.droidsomething.odin.interfaces.IOdinJSONMapping;
+import de.ah.droidsomething.odin.interfaces.RequestCallback;
+import de.ah.droidsomething.odin.requests.GETRequest;
+import de.ah.droidsomething.odin.requests.POSTRequest;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,6 +19,30 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new GETRequest().setURL("http://www.google.de").execute(new RequestCallback() {
+            @Override
+            public void onFinish(OdinResponse response) {
+                Log.i("TEST", response.getResponseBody());
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.i("TEST", error);
+
+            }
+        });
+        
+        new POSTRequest().setURL("http://www.google.de").executeJSONMapping(new IOdinJSONMapping<GETRequest>() {
+            @Override
+            public void onFinish(GETRequest object) {
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        },GETRequest.class);
     }
 
     @Override
