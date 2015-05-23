@@ -18,15 +18,13 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import de.ah.droidsomething.easyhttp.enums.EasyMethods;
-
 /**
  * Created by Alexander Hieser on 20.05.15.
  */
 public class OdinRequest {
 
     /** Attributes **/
-    private EasyMethods Method;
+    private OdinMethods Method;
     private String Encoding = "UTF-8";
     private String URL;
     private ArrayList<NameValuePair> parameters;
@@ -39,7 +37,7 @@ public class OdinRequest {
         this.headers = new ArrayList<Header>();
     }
 
-    public OdinRequest setMethodType(EasyMethods method) {
+    public OdinRequest setMethodType(OdinMethods method) {
         this.Method = method;
         return this;
     }
@@ -51,8 +49,8 @@ public class OdinRequest {
 
     public OdinRequest setMethodType(String method) {
         try {
-            EasyMethods easyMethods = parseMethods(method);
-            this.setMethodType(easyMethods);
+            OdinMethods odinMethods = parseMethods(method);
+            this.setMethodType(odinMethods);
             return this;
         }catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -82,7 +80,7 @@ public class OdinRequest {
         parameters.clear();;
     }
 
-    public void execute(final OdinInterface callback) {
+    public void execute(final RequestCallback callback) {
         if(isValid()) {
         new AsyncTask<Void,Void,HttpResponse>() {
 
@@ -95,7 +93,7 @@ public class OdinRequest {
             protected void onPostExecute(HttpResponse httpResponse) {
                 super.onPostExecute(httpResponse);
                 if(httpResponse != null) {
-                    OdinResponse easyResponse = parseResponse(response);
+                    OdinResponse easyResponse = parseResponse(httpResponse);
                     if(easyResponse == null){
                         callback.onError("An error occured. Cant parse HTTPResponse");
                     }
@@ -233,18 +231,18 @@ public class OdinRequest {
      * @return
      * @throws IllegalArgumentException
      */
-    private EasyMethods parseMethods(String method) throws IllegalArgumentException{
+    private OdinMethods parseMethods(String method) throws IllegalArgumentException{
         if(method.equals("GET")) {
-            return EasyMethods.GET;
+            return OdinMethods.GET;
         }
         if(method.equals("POST")) {
-            return EasyMethods.POST;
+            return OdinMethods.POST;
         }
         if(method.equals("PUT")){
-            return EasyMethods.PUT;
+            return OdinMethods.PUT;
         }
         if(method.equals("DELETE")){
-            return EasyMethods.DELETE;
+            return OdinMethods.DELETE;
         }
         throw new IllegalArgumentException("Cant parse given HTTP Method string");
     }
