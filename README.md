@@ -1,5 +1,5 @@
 # OdinHttp
-Odin is a lightweight Http Library wich simplifies the android HTTP Communication
+Odin is a lightweight, completely asynchronous, Http Library wich simplifies android HTTP Communication.
 
 ### Simple GET Request:
 
