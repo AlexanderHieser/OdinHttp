@@ -26,6 +26,7 @@ The response from the sample URL look like this:
     "one": "two",
     "key": "value"
   }
+```
 
 ```java
     new POSTRequest().setURL("http://echo.jsontest.com/key/value/one/two").executeJSONMapping(new IOdinJSONMapping<OnTwo>() {
@@ -42,5 +43,3 @@ The response from the sample URL look like this:
         },OnTwo.class);
 ```
 
-
-```
