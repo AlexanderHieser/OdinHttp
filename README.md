@@ -20,6 +20,13 @@ Odin is a lightweight Http Library wich simplifies the android HTTP Communicatio
 
 ### Simple POST Request, supports automatic Mapping using Gson
 
+The response from the sample URL look like this:
+```json
+  {
+    "one": "two",
+    "key": "value"
+  }
+
 ```java
     new POSTRequest().setURL("http://echo.jsontest.com/key/value/one/two").executeJSONMapping(new IOdinJSONMapping<OnTwo>() {
             @Override
@@ -35,10 +42,5 @@ Odin is a lightweight Http Library wich simplifies the android HTTP Communicatio
         },OnTwo.class);
 ```
 
-The response from the sample URL look like this:
-```json
-  {
-    "one": "two",
-    "key": "value"
-  }
+
 ```
