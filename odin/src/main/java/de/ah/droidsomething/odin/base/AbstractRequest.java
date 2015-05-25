@@ -8,8 +8,11 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.ah.droidsomething.odin.interfaces.CustomCallback;
 import de.ah.droidsomething.odin.interfaces.IOdinRequest;
 import de.ah.droidsomething.odin.OdinResponse;
+import de.ah.droidsomething.odin.interfaces.JSONCallback;
+import de.ah.droidsomething.odin.interfaces.StringCallback;
 
 /**
  * Created by Alexander Hieser on 23.05.2015.
@@ -20,6 +23,9 @@ public abstract class AbstractRequest<T> implements IOdinRequest<T> {
     private String URL;
     private ArrayList<NameValuePair> URLParams;
     private ArrayList<Header> Headers;
+
+
+    private String encoding = "UTF-8";
 
     public AbstractRequest() {
         this.URLParams = new ArrayList<NameValuePair>();
@@ -44,7 +50,6 @@ public abstract class AbstractRequest<T> implements IOdinRequest<T> {
             this.URLParams.add(pair);
         }
         return (T)this;
-
     }
 
     @Override
@@ -53,29 +58,29 @@ public abstract class AbstractRequest<T> implements IOdinRequest<T> {
             this.Headers.add(header);
         }
         return (T)this;
-
     }
 
     @Override
     public T setHeaders(ArrayList<Header> headers) {
         this.Headers.addAll(headers);
         return (T)this;
-
     }
 
     @Override
     public T clearHeaders() {
         this.Headers.clear();
         return (T)this;
-
     }
 
     @Override
     public T clearURLParams() {
         this.URLParams.clear();
         return (T)this;
-
     }
+
+    public abstract void execute(StringCallback callback);
+    public abstract <T> void execute(Class tClass, JSONCallback<T> callback);
+    public abstract <T> void execute(Class tClass, CustomCallback<T> callback);
 
     public OdinResponse parseResponse(HttpResponse response) {
         try {
@@ -107,5 +112,13 @@ public abstract class AbstractRequest<T> implements IOdinRequest<T> {
 
     public ArrayList<Header> getHeaders() {
         return Headers;
+    }
+
+    public String getEncoding() {
+        return encoding;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
     }
 }

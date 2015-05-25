@@ -6,11 +6,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import de.ah.droidsomething.odin.OdinResponse;
-import de.ah.droidsomething.odin.interfaces.IOdinJSONMapping;
-import de.ah.droidsomething.odin.interfaces.RequestCallback;
+import org.apache.http.HttpResponse;
+
+import de.ah.droidsomething.odin.interfaces.CustomCallback;
 import de.ah.droidsomething.odin.requests.GETRequest;
-import de.ah.droidsomething.odin.requests.POSTRequest;
+import de.ah.droidsomething.odin.requests.PUTRequest;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -19,30 +19,26 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new GETRequest().setURL("http://www.google.de").execute(new RequestCallback() {
+
+        new GETRequest().setURL("http://www.google.de").execute(OnTwo.class, new CustomCallback<OnTwo>() {
             @Override
-            public void onFinish(OdinResponse response) {
-                Log.i("TEST", response.getResponseBody());
+            public void onFinish(OnTwo object) {
+                Log.i("TAG",object.getOne());
             }
 
             @Override
             public void onError(String error) {
-                Log.i("TEST", error);
 
+            }
+
+            @Override
+            public OnTwo onPrepare(HttpResponse response) {
+                OnTwo o = new OnTwo();
+                o.setOne(response.getStatusLine().getReasonPhrase());
+                o.setTwo("test");
+                return o;
             }
         });
-        
-        new POSTRequest().setURL("http://www.google.de").executeJSONMapping(new IOdinJSONMapping<GETRequest>() {
-            @Override
-            public void onFinish(GETRequest object) {
-
-            }
-
-            @Override
-            public void onError(String error) {
-
-            }
-        },GETRequest.class);
     }
 
     @Override

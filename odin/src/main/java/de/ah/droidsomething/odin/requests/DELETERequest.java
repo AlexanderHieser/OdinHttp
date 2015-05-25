@@ -7,7 +7,8 @@ import com.google.gson.Gson;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -16,23 +17,23 @@ import org.apache.http.message.BasicHeader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import de.ah.droidsomething.odin.OdinResponse;
+import de.ah.droidsomething.odin.base.AbstractRequest;
 import de.ah.droidsomething.odin.interfaces.CustomCallback;
 import de.ah.droidsomething.odin.interfaces.JSONCallback;
-import de.ah.droidsomething.odin.OdinResponse;
 import de.ah.droidsomething.odin.interfaces.StringCallback;
-import de.ah.droidsomething.odin.base.AbstractRequest;
 
 /**
- * Created by Alex on 23.05.2015.
+ * Created by Alexander Hieser on 23.05.2015.
  */
-public class POSTRequest extends AbstractRequest<POSTRequest> {
+public class DELETERequest extends AbstractRequest<DELETERequest> {
 
-    private final String TAG = "POSTRequest";
+    private final String TAG = "PUTRequest";
     private StringCallback requestCallback;
     private JSONCallback jsonRequestCallback;
     private CustomCallback customCallback;
     private Class thisType;
-    private HttpPost post;
+    private HttpDelete delete;
     private OdinResponse response;
 
 
@@ -50,7 +51,7 @@ public class POSTRequest extends AbstractRequest<POSTRequest> {
                 protected OdinResponse doInBackground(Void... voids) {
                     DefaultHttpClient client = new DefaultHttpClient();
                     try {
-                        HttpResponse httpResponse = client.execute(post);
+                        HttpResponse httpResponse = client.execute(delete);
                         response = parseResponse(httpResponse);
                         return response;
                     }catch (IOException e) {
@@ -81,7 +82,7 @@ public class POSTRequest extends AbstractRequest<POSTRequest> {
                 protected OdinResponse doInBackground(Void... voids) {
                     DefaultHttpClient client = new DefaultHttpClient();
                     try {
-                        HttpResponse httpResponse = client.execute(post);
+                        HttpResponse httpResponse = client.execute(delete);
                         response = parseResponse(httpResponse);
 
                         return response;
@@ -121,7 +122,7 @@ public class POSTRequest extends AbstractRequest<POSTRequest> {
                 protected HttpResponse doInBackground(Void... voids) {
                     DefaultHttpClient client = new DefaultHttpClient();
                     try {
-                        HttpResponse httpResponse = client.execute(post);
+                        HttpResponse httpResponse = client.execute(delete);
                         return httpResponse;
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -141,35 +142,6 @@ public class POSTRequest extends AbstractRequest<POSTRequest> {
         }
     }
 
-    /**
-     * Parse the given Object to JSON String and sets Content-Type Header application/json
-     * @param o Object to parse
-     * @param tClass Class of the Object to parse
-     * @return instance
-     */
-    public POSTRequest setJSONBody(Object o, Class tClass) {
-        String jsonbody;
-        Gson gson = new Gson();
-        jsonbody = gson.toJson(o,tClass);
-        try {
-            this.post.setEntity(new StringEntity(jsonbody));
-            this.setHeaders(new BasicHeader("Content-Type","application/json"));
-            return this;
-        }catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Cannot parse given object to JSON");
-        }
-    }
-
-    public POSTRequest setBody(String body) {
-        try {
-            this.post.setEntity(new StringEntity(body));
-            return this;
-        }catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Cannot set Body");
-        }
-    }
 
     /**
      * Initialize this request before executing
@@ -179,8 +151,8 @@ public class POSTRequest extends AbstractRequest<POSTRequest> {
         Log.i("URL", getURL() + urlparams);
         Header[] headers = new Header[getHeaders().size()];
         getHeaders().toArray(headers);
-        post = new HttpPost(getURL()+"?"+urlparams);
-        post.setHeaders(headers);
+        delete = new HttpDelete(getURL()+"?"+urlparams);
+        delete.setHeaders(headers);
         return true;
     }
 }
