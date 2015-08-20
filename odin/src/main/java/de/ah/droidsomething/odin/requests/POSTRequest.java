@@ -16,6 +16,8 @@ import org.apache.http.message.BasicHeader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import de.ah.droidsomething.odin.base.AbstractOdin;
+import de.ah.droidsomething.odin.base.Odin;
 import de.ah.droidsomething.odin.interfaces.CustomCallback;
 import de.ah.droidsomething.odin.interfaces.JSONCallback;
 import de.ah.droidsomething.odin.OdinResponse;
@@ -34,7 +36,11 @@ public class POSTRequest extends AbstractRequest<POSTRequest> {
     private Class thisType;
     private HttpPost post;
     private OdinResponse response;
+    private AbstractOdin parent;
 
+    public POSTRequest(AbstractOdin parent) {
+        this.parent = parent;
+    }
 
     /**
      * Starts asynchronous executing
