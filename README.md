@@ -1,22 +1,31 @@
 # OdinHttp
 Odin is a lightweight, completely asynchronous, Http Library wich simplifies android HTTP Communication.
 
+### Gradle 
+
+```java
+	
+	compile(group: 'de.ahieser.odinhttp', name: 'odin', version: '0.5.2', ext: 'aar')
+	
+```
+
+
 
 ### Simple GET Request:
 
 ```java
 
-   new GETRequest().setURL("http://www.google.de")
-				   .execute(new RequestCallback() {
-
+	Odin odin = new Odin();
+        odin.Get().setURL("https://www.google.de/").execute(new StringCallback() {
             @Override
             public void onFinish(OdinResponse response) {
-                Log.i("SUCCESS", response.getResponseBody());
+                Log.i("TEST",response.getResponseBody());
             }
 
             @Override
             public void onError(String error) {
-                Log.i("ERROR", error);
+                Log.i("TEST",error);
+
             }
         });
 
@@ -37,7 +46,7 @@ The response from the sample URL look like this:
 
 ```java
 
-    new POSTRequest().setURL("http://echo.jsontest.com/key/value/one/two")
+    odin.Post().setURL("http://echo.jsontest.com/key/value/one/two")
 					 .executeJSONMapping(OnTwo.class,new JSONCallback<OnTwo>() {
             @Override
             public void onFinish(OnTwo object) {
@@ -56,7 +65,7 @@ The response from the sample URL look like this:
 
 ```java
 
-   new GETRequest().setURL("http://www.google.de")
+   new odin.Get()..setURL("http://www.google.de")
 				   .execute(OnTwo.class, new CustomCallback<OnTwo>() {
             @Override
             public void onFinish(OnTwo object) {
